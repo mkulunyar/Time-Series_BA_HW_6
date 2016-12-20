@@ -1,0 +1,51 @@
+---
+title: "Q2"
+author: "Ali Kulunyar"
+date: "November 26, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r ts}
+data<-read.csv('/Users/mkulunyar/Downloads/Sorular/Q2.csv', header=TRUE, stringsAsFactors=FALSE)
+data
+
+data$Date <- as.Date(data$Date, "%m/%d/%y")
+head(data)
+tail(data)
+data$MonthYear<-format(data$Date, format="%Y-%m-%d")
+
+#Daily Sales Average
+sales_daily<- aggregate(data$Sales ~ MonthYear, data, mean, na.rm=TRUE)
+sales_daily
+sales_daily.ts<-ts(sales_daily$`data$Sales`, frequency = 365, start = c(2014))
+sales_daily.ts
+plot(sales_daily.ts)
+
+#Smoothing
+sales_daily.holt.T <- HoltWinters(sales_daily.ts, gamma=FALSE)
+sales_daily.holt.T
+plot(sales_daily.holt.T)
+
+#Holt's
+library(forecast)
+sales_daily.forecasts <- forecast.HoltWinters(sales_daily.holt.T, h=5)  
+plot.forecast(sales_daily.forecasts)
+sales_daily.forecasts
+
+#ARIMA
+sales_daily.arima<-arima(sales_daily.ts, c(0,0,0))  
+sales_daily.arima.forecasts <- forecast.Arima(sales_daily.arima, h=12)
+sales_daily.arima.forecasts
+plot(sales_daily.arima.forecasts)
+
+
+
+
+```
+
+
