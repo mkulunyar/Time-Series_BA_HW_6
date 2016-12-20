@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r ts}
 data<-read.csv('/Users/mkulunyar/Downloads/Sorular/Q2.csv', header=TRUE, stringsAsFactors=FALSE)
-data
 
 data$Date <- as.Date(data$Date, "%m/%d/%y")
 head(data)
@@ -21,7 +20,6 @@ data$MonthYear<-format(data$Date, format="%Y-%m-%d")
 
 #Daily Sales Average
 sales_daily<- aggregate(data$Sales ~ MonthYear, data, mean, na.rm=TRUE)
-sales_daily
 sales_daily.ts<-ts(sales_daily$`data$Sales`, frequency = 365, start = c(2014))
 sales_daily.ts
 plot(sales_daily.ts)
